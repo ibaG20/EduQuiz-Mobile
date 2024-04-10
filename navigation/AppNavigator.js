@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/home';// Importe o arquivo HomeScreen
-// Importe os demais componentes de tela, se houver
+import HomeScreen from '../screens/home'; // Importe o arquivo HomeScreen
+import CreateQuizScreen from '../screens/createquiz'; // Importe sua tela CreateQuizScreen aqui
 
 const Stack = createStackNavigator();
 
@@ -14,6 +14,10 @@ const App = () => {
           name="Home"
           component={HomeScreen}
           initialParams={{ username: 'Nome do Usuário' }} // Defina o nome de usuário inicial
+        />
+        <Stack.Screen
+          name="Criar quiz"
+          component={CreateQuizScreen}
         />
         {/* Adicione as outras telas aqui */}
       </Stack.Navigator>

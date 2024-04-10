@@ -3,7 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
-const HomeScreen = ({ route }) => {
+const HomeScreen = ({ navigation, route }) => {
+
+
+  const handleCreateQuiz = () => {
+    // Lógica para navegar para a tela de criação de quiz
+    navigation.navigate('Criar quiz');
+  };
+
   // Extrair o nome do usuário dos parâmetros de rota, se estiver disponível
   const { userName } = route.params ?? {};
 
@@ -13,14 +20,15 @@ const HomeScreen = ({ route }) => {
         colors={['#12082F', '#181D95']} // Cores do gradiente (de cima para baixo)
         style={styles.background}
       >
+
         {/* Mensagem de boas-vindas */}
         <View style={styles.welcomeContainer}>
           <Text style={styles.welcomeText}>{`Olá, ${userName || 'Usuário'}!`}</Text>
         </View>
-        
+
         {/* Botões */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleCreateQuiz}>
             <Text style={styles.buttonText}>Criar quiz</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
@@ -37,10 +45,10 @@ const HomeScreen = ({ route }) => {
         {/* Barra na parte inferior */}
         <View style={styles.bottomBar}>
           <TouchableOpacity style={styles.bottomBarButton}>
-          <Ionicons name="home" size={40} color="white" style={styles.icon} />
+            <Ionicons name="home" size={40} color="white" style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.bottomBarButton}>
-          <Ionicons name="person" size={40} color="white" style={styles.icon} />
+            <Ionicons name="person" size={40} color="white" style={styles.icon} />
           </TouchableOpacity>
         </View>
 
