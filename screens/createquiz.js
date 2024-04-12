@@ -117,8 +117,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 40,
     textAlign: 'center',
     marginBottom: 20,
     color: 'white',
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
   },
   descrição: {
     height: 150,
@@ -144,13 +143,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
   },
   picker: {
     height: 40,
     marginBottom: 10,
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
   },
   painel: {
     justifyContent: 'center',
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   saveButton: {
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
     paddingVertical: 15,
     paddingHorizontal: 120,
     borderRadius: 10,
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
   },
   alternativesLabel: {
     fontSize: 20,
-    color: 'white',
+    color: '#E7DEFF',
     marginBottom: 10,
   },
   alternativeInput: {
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
   },
   addButton: {
     backgroundColor: '#12082F',
@@ -196,7 +195,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButtonText: {
-    color: 'white',
+    color: '#E7DEFF',
     fontSize: 16,
     textAlign: 'center',
   },
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     height: 40,
     marginBottom: 10,
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: '#E7DEFF',
   },
   bottomSpace: {
     height: 75,
