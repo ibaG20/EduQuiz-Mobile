@@ -1,13 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import BottomBar from '../components/BottomBar';
 
 const HomeScreen = ({ navigation, route }) => {
-
-
   const handleCreateQuiz = () => {
-    // Lógica para navegar para a tela de criação de quiz
     navigation.navigate('Criar quiz');
   };
 
@@ -17,7 +14,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#12082F', '#181D95']} // Cores do gradiente (de cima para baixo)
+        colors={['#12082F', '#181D95']} 
         style={styles.background}
       >
 
@@ -41,17 +38,7 @@ const HomeScreen = ({ navigation, route }) => {
             <Text style={styles.buttonText}>Listar pergunta</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Barra na parte inferior */}
-        <View style={styles.bottomBar}>
-          <TouchableOpacity style={styles.bottomBarButton}>
-            <Ionicons name="home" size={40} color="white" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomBarButton}>
-            <Ionicons name="person" size={40} color="white" style={styles.icon} />
-          </TouchableOpacity>
-        </View>
-
+        <BottomBar />
       </LinearGradient>
     </View>
   );
@@ -69,15 +56,15 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     position: 'absolute',
-    top: 20, // Distância do topo da tela
-    left: 20, // Distância da esquerda da tela
+    top: 20, 
+    left: 20, 
   },
   welcomeText: {
     fontSize: 24,
     color: 'white',
   },
   buttonContainer: {
-    alignItems: 'center', // Centraliza os botões horizontalmente
+    alignItems: 'center', 
   },
   button: {
     backgroundColor: '#30237B',
@@ -90,22 +77,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 25,
     textAlign: 'center',
-  },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 75,
-    backgroundColor: '#12082F',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  bottomBarButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 
