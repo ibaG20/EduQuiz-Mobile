@@ -78,7 +78,9 @@ const CreateQuestionScreen = ({ navigation }) => {
                                         onPress={() => handleToggleCorrectAnswer(index)}
                                     >
                                         <Text style={styles.checkboxDescription}>Correto</Text>
-                                        {alternative.isCorrect && <Text style={styles.checkmark}>✕</Text>}
+                                        <View style={styles.checkbox}>
+                                            {alternative.isCorrect && <Text style={styles.checkmark}>✕</Text>}
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -165,11 +167,18 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginRight: 10,
     },
-    
+    checkbox: {
+        width: 24,
+        height: 24,
+        borderRadius: 5, // Border radius for square shape
+        borderWidth: 1,
+        borderColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     checkmark: {
         fontSize: 18,
         color: '#ffffff',
-        borderColor: 'white',
     },
     addButton: {
         backgroundColor: '#30237B',
