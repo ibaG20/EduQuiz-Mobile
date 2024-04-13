@@ -5,6 +5,8 @@ import HomeScreen from '../screens/home'; // Importe o arquivo HomeScreen
 import CreateQuizScreen from '../screens/createquiz'; // Importe sua tela CreateQuizScreen aqui
 import LoginScreen from '../screens/Login';
 import UserScreen from '../screens/user';
+import ListQuestion from '../screens/listQuestion';
+import ListQuiz from '../screens/listQuiz';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +27,14 @@ const App = () => {
         <Stack.Screen
           name="Criar quiz"
           component={CreateQuizScreen}
+        />
+        <Stack.Screen
+          name="Listar pergunta"
+          component={ListQuestion}
+        />
+        <Stack.Screen
+          name="Listar quiz"
+          component={ListQuiz}
         />
         <Stack.Screen
           name="User"
