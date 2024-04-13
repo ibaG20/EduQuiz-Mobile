@@ -7,6 +7,9 @@ const HomeScreen = ({ navigation, route }) => {
   const handleCreateQuiz = () => {
     navigation.navigate('Criar quiz');
   };
+  const handleCreateQuestion = () => {
+    navigation.navigate('Criar pergunta');
+  };
 
   // Extrair o nome do usuário dos parâmetros de rota, se estiver disponível
   const { userName } = route.params ?? {};
@@ -31,7 +34,7 @@ const HomeScreen = ({ navigation, route }) => {
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Listar quiz</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleCreateQuestion}>
             <Text style={styles.buttonText}>Criar pergunta</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
