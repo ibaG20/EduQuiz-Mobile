@@ -2,13 +2,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
 
-const LoginScreen = ({ navigation, route }) => {
+const CreateAccountScreen = ({ navigation, route }) => {
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassord] = useState('');
 
-    function handleSignIn() {
-        if (email === '' || password === '') {
+    function handleCreateAccount() {
+        if (name ==='' || email === '' || password === '') {
             alert("Preencha os campos");
             return;
         }
@@ -16,8 +17,8 @@ const LoginScreen = ({ navigation, route }) => {
         navigation.replace('Home');  // Usa 'replace' para evitar que o usuário volte à tela de login
     }
 
-    function handleGoToCreateAccount() {
-        navigation.navigate('Criar conta')
+    function handleGoToLogin() {
+        navigation.navigate('Login')
     }
 
     return (
@@ -29,8 +30,15 @@ const LoginScreen = ({ navigation, route }) => {
                 <Text style={styles.titleContainer}>Edu Quiz</Text>
 
                 <View style={styles.formContainer}>
-                    <Text style={styles.titleForm}>Login</Text>
+                    <Text style={styles.titleForm}>Criar Conta</Text>
 
+                    <Text style={styles.text}>Nome:</Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setName}
+                        value={name}
+                        placeholder='digite seu nome'
+                    />
                     <Text style={styles.text}>Email:</Text>
                     <TextInput
                         style={styles.input}
@@ -46,12 +54,12 @@ const LoginScreen = ({ navigation, route }) => {
                         placeholder='digite sua senha'
                         secureTextEntry={true}
                     />
-                    <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-                        <Text style={styles.textButton}>Entrar</Text>
+                    <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
+                        <Text style={styles.textButton}>Criar</Text>
                     </TouchableOpacity>
                 </View>
 
-                <Text style={styles.createAccount} onPress={handleGoToCreateAccount}>Criar conta</Text>
+                <Text style={styles.createAccount} onPress={handleGoToLogin}>Login</Text>
             </LinearGradient>
         </View>
     );
@@ -127,5 +135,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LoginScreen;
+export default CreateAccountScreen;
 

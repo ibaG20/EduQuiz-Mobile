@@ -7,6 +7,7 @@ import LoginScreen from '../screens/Login';
 import UserScreen from '../screens/user';
 import ListQuestion from '../screens/listQuestion';
 import ListQuiz from '../screens/listQuiz';
+import CreateAccountScreen from '../screens/CreateAccount';
 
 const Stack = createStackNavigator();
 
@@ -14,10 +15,14 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
+        <Stack.Screen
           name="Login"
           component={LoginScreen}
-          //options={{ headerShown: false }}
+        //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Criar conta"
+          component={CreateAccountScreen}
         />
         <Stack.Screen
           name="Home"

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text, Button, TouchableOpacity } from "react-native";
 
 export function QuizItem({ titulo, descricao }) {
   return (
@@ -9,7 +9,10 @@ export function QuizItem({ titulo, descricao }) {
         <Text numberOfLines={5} style={styles.description}>
           {descricao}
         </Text>
-        <Button title="Abrir"/>
+
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textButton}>Abrir</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -17,27 +20,38 @@ export function QuizItem({ titulo, descricao }) {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
     flexDirection: "row",
-    backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
-
   content: {
-    flex: 1,
-    marginLeft: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#6F4E37",
-    marginBottom: 16,
+    color: "#E7DEFF",
+    marginBottom: 8,
   },
   description: {
     fontSize: 16,
-    color: "#000",
+    color: "#E7DEFF",
   },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#12082F',
+    borderRadius: 8,
+    height: 45,
+    width: 300,
+    margin: 10
+},
+textButton:{
+    color: '#E7DEFF',
+    fontSize: 20
+},
 });
