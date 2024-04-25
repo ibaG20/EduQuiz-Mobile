@@ -8,6 +8,7 @@ import UserScreen from '../screens/user';
 import ListQuestion from '../screens/listQuestion';
 import ListQuiz from '../screens/listQuiz';
 import CreateAccountScreen from '../screens/CreateAccount';
+import CreateQuestionScreen from '../screens/createquestion';
 
 const Stack = createStackNavigator();
 
@@ -45,7 +46,10 @@ const App = () => {
           name="User"
           component={UserScreen}
         />
-        {/* Adicione as outras telas aqui */}
+        <Stack.Screen
+          name="Criar pergunta"
+          component={CreateQuestionScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -13,6 +13,9 @@ const HomeScreen = ({ navigation, route }) => {
   const handleListQuiz = () => {
     navigation.navigate('Listar quiz');
   };
+  const handleCreateQuestion = () => {
+    navigation.navigate('Criar pergunta');
+  };
 
   // Extrair o nome do usuário dos parâmetros de rota, se estiver disponível
   const { userName } = route.params ?? {};
@@ -20,7 +23,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#12082F', '#181D95']} 
+        colors={['#12082F', '#181D95']}
         style={styles.background}
       >
 
@@ -37,7 +40,7 @@ const HomeScreen = ({ navigation, route }) => {
           <TouchableOpacity style={styles.button} onPress={handleListQuiz}>
             <Text style={styles.buttonText}>Listar quiz</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleCreateQuestion}>
             <Text style={styles.buttonText}>Criar pergunta</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleListQuestion}>
@@ -48,7 +51,7 @@ const HomeScreen = ({ navigation, route }) => {
       </LinearGradient>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -62,15 +65,15 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     position: 'absolute',
-    top: 20, 
-    left: 20, 
+    top: 20,
+    left: 20,
   },
   welcomeText: {
     fontSize: 24,
     color: 'white',
   },
   buttonContainer: {
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#30237B',
