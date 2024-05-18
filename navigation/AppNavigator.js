@@ -9,6 +9,7 @@ import ListQuestion from '../screens/listQuestion';
 import ListQuiz from '../screens/listQuiz';
 import CreateAccountScreen from '../screens/CreateAccount';
 import CreateQuestionScreen from '../screens/createquestion';
+import OpenQuiz from '../screens/openQuiz';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,10 @@ const App = () => {
         <Stack.Screen
           name="Listar quiz"
           component={ListQuiz}
+        />
+        <Stack.Screen
+          name="Abrir quiz"
+          component={OpenQuiz}
         />
         <Stack.Screen
           name="User"

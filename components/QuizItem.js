@@ -1,7 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Text, Button, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 export function QuizItem({ titulo, descricao }) {
+  const navigation = useNavigation();
+  
+  function handleOpenQuiz(){
+    navigation.navigate('Abrir quiz');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -10,7 +17,7 @@ export function QuizItem({ titulo, descricao }) {
           {descricao}
         </Text>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleOpenQuiz}>
           <Text style={styles.textButton}>Abrir</Text>
         </TouchableOpacity>
       </View>
@@ -49,9 +56,12 @@ const styles = StyleSheet.create({
     height: 45,
     width: 300,
     margin: 10
-},
-textButton:{
+  },
+  textButton: {
     color: '#E7DEFF',
     fontSize: 20
-},
+  },
 });
+
+
+

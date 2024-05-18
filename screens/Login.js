@@ -12,8 +12,7 @@ const LoginScreen = ({ navigation, route }) => {
             alert("Preencha os campos");
             return;
         }
-        // Aqui você pode adicionar verificações de autenticação mais complexas
-        navigation.replace('Home');  // Usa 'replace' para evitar que o usuário volte à tela de login
+        navigation.replace('Home'); 
     }
 
     function handleGoToCreateAccount() {

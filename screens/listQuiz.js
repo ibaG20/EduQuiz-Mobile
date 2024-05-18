@@ -7,6 +7,7 @@ import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const ListQuiz = ({ navigation, route }) => {
+
     return (
         <View style={styles.container}>
             <LinearGradient

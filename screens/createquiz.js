@@ -13,6 +13,7 @@ const CreateQuizScreen = ({ navigation }) => {
 
   const handleSaveQuiz = () => {
     console.log('Quiz salvo:', { title, description, questionType, alternatives, correctAnswer });
+    navigation.navigate('Listar quiz')
   };
 
   const handleAddAlternative = () => {
