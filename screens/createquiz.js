@@ -11,7 +11,7 @@ const CreateQuizScreen = ({ navigation, route }) => {
     const [questions, setQuestions] = useState([]);
     const [errorMessage, setErrorMessage] = useState(''); // Adicionando errorMessage ao estado inicial
 
-    useEffect(() => {
+   useEffect(() => {
         if (route.params && route.params.question) {
             const { title: questionTitle, description: questionDescription } = route.params.question;
             setQuestions([...questions, { title: questionTitle, description: questionDescription }]);

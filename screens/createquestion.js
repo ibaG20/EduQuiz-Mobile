@@ -11,6 +11,7 @@ const CreateQuestionScreen = ({ navigation }) => {
     const handleSaveQuestion = () => {
         // Aqui você pode adicionar a lógica para salvar a pergunta
         console.log('Pergunta salva:', { title, description, alternatives });
+        navigation.navigate('Listar pergunta')
     };
 
     const handleAddAlternative = () => {

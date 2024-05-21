@@ -7,6 +7,12 @@ const HomeScreen = ({ navigation, route }) => {
   const handleCreateQuiz = () => {
     navigation.navigate('Criar quiz');
   };
+  const handleListQuestion = () => {
+    navigation.navigate('Listar pergunta');
+  };
+  const handleListQuiz = () => {
+    navigation.navigate('Listar quiz');
+  };
   const handleCreateQuestion = () => {
     navigation.navigate('Criar pergunta');
   };
@@ -17,7 +23,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#12082F', '#181D95']} 
+        colors={['#12082F', '#181D95']}
         style={styles.background}
       >
 
@@ -31,13 +37,13 @@ const HomeScreen = ({ navigation, route }) => {
           <TouchableOpacity style={styles.button} onPress={handleCreateQuiz}>
             <Text style={styles.buttonText}>Criar quiz</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleListQuiz}>
             <Text style={styles.buttonText}>Listar quiz</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleCreateQuestion}>
             <Text style={styles.buttonText}>Criar pergunta</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleListQuestion}>
             <Text style={styles.buttonText}>Listar pergunta</Text>
           </TouchableOpacity>
         </View>
@@ -45,7 +51,7 @@ const HomeScreen = ({ navigation, route }) => {
       </LinearGradient>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -59,15 +65,15 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     position: 'absolute',
-    top: 20, 
-    left: 20, 
+    top: 20,
+    left: 20,
   },
   welcomeText: {
     fontSize: 24,
     color: 'white',
   },
   buttonContainer: {
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#30237B',

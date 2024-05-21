@@ -1,14 +1,30 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-function BottomBar() {
+function BottomBar() {  
+  const navigation = useNavigation();
+
+  function handleIconHome(){
+    navigation.navigate('Home');
+  }
+  function handleIconUser(){
+    navigation.navigate('User');
+  }
+
     return (
         <View style={styles.bottomBar}>
-            <TouchableOpacity style={styles.bottomBarButton}>
+            <TouchableOpacity 
+              style={styles.bottomBarButton}
+              onPress={handleIconHome}
+            >
                 <Ionicons name="home" size={40} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomBarButton}>
+            <TouchableOpacity 
+              style={styles.bottomBarButton}
+              onPress={handleIconUser}
+            >
                 <Ionicons name="person" size={40} color="white" />
             </TouchableOpacity>
         </View>
@@ -35,3 +51,6 @@ const styles = {
 };
 
 export default BottomBar;
+
+
+
