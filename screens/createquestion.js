@@ -91,7 +91,9 @@ const CreateQuestionScreen = ({ navigation }) => {
                                         onPress={() => handleToggleCorrectAnswer(index)}
                                     >
                                         <Text style={styles.checkboxDescription}>Correto</Text>
-                                        {alternative.isCorrect && <Text style={styles.checkmark}>✕</Text>}
+                                        <View style={styles.checkbox}>
+                                            {alternative.isCorrect && <Text style={styles.checkmark}>✕</Text>}
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
                             </View>
