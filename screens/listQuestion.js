@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../src/firebase';
 import { QuestionItem } from '../components/QuestionItem'; // Named import
-import SeparatorItem from '../components/SeparatorItem'; // Default import
+import { SeparatorItem } from '../components/SeparatorItem';
 import BottomBar from '../components/BottomBar'; // Default import
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -14,10 +14,10 @@ const ListQuestion = ({ navigation, route }) => {
         const questionsRef = ref(database, 'questions');
         const unsubscribe = onValue(questionsRef, (snapshot) => {
             const data = snapshot.val();
-            console.log('Dados do Firebase:', data); 
+            console.log('Dados do Firebase:', data);
             const questionList = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
             setQuestions(questionList);
-            console.log('Perguntas armazenadas no estado:', questionList); 
+            console.log('Perguntas armazenadas no estado:', questionList);
         });
 
         return () => unsubscribe();
@@ -32,6 +32,7 @@ const ListQuestion = ({ navigation, route }) => {
                 <Text style={styles.title}>Lista de Perguntas</Text>
                 <View style={styles.listContainer}>
                     <FlatList
+                        ItemSeparatorComponent={SeparatorItem}
                         data={questions}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) => {
@@ -41,7 +42,6 @@ const ListQuestion = ({ navigation, route }) => {
                             }
                             return <QuestionItem {...item} />;
                         }}
-                        ItemSeparatorComponent={SeparatorItem}
                     />
                 </View>
                 <BottomBar />
