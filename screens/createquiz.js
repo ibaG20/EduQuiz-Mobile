@@ -3,20 +3,26 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Keyboa
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../src/firebase';
 
 const CreateQuizScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [questionType, setQuestionType] = useState('Escolha uma pergunta');
     const [questions, setQuestions] = useState([]);
-    const [errorMessage, setErrorMessage] = useState(''); // Adicionando errorMessage ao estado inicial
+    const [errorMessage, setErrorMessage] = useState('');
 
-   useEffect(() => {
-        if (route.params && route.params.question) {
-            const { title: questionTitle, description: questionDescription } = route.params.question;
-            setQuestions([...questions, { title: questionTitle, description: questionDescription }]);
-        }
-    }, [route.params]);
+    useEffect(() => {
+        const questionsRef = ref(database, 'questions');
+        const unsubscribe = onValue(questionsRef, (snapshot) => {
+            const data = snapshot.val();
+            const questionList = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+            setQuestions(questionList.map(question => question.title)); // Armazenar apenas os títulos das perguntas
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     const handleSaveQuiz = () => {
         if (questionType === 'Escolha uma pergunta') {
@@ -37,7 +43,7 @@ const CreateQuizScreen = ({ navigation, route }) => {
                 >
                     <Picker.Item label="Escolha uma pergunta" value="Escolha uma pergunta" />
                     {questions.length > 0 && questions.map((question, index) => (
-                        <Picker.Item key={index} label={question.title} value={question.title} />
+                        <Picker.Item key={index} label={question} value={question} />
                     ))}
                 </Picker>
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
@@ -154,6 +160,8 @@ const styles = StyleSheet.create({
     errorMessage: {
         color: 'red',
         marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 15,
     },
     bottomSpace: {
         height: 75,

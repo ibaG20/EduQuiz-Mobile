@@ -1,12 +1,28 @@
-import React from 'react';
-import { FlatList, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
-import { perguntaList } from '../data/perguntaList';
-import { QuestionItem } from '../components/QuestionItem';
-import { SeparatorItem } from '../components/SeparatorItem';
-import BottomBar from '../components/BottomBar';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../src/firebase';
+import { QuestionItem } from '../components/QuestionItem'; // Named import
+import SeparatorItem from '../components/SeparatorItem'; // Default import
+import BottomBar from '../components/BottomBar'; // Default import
 import { LinearGradient } from 'expo-linear-gradient';
 
 const ListQuestion = ({ navigation, route }) => {
+    const [questions, setQuestions] = useState([]);
+
+    useEffect(() => {
+        const questionsRef = ref(database, 'questions');
+        const unsubscribe = onValue(questionsRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log('Dados do Firebase:', data); 
+            const questionList = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+            setQuestions(questionList);
+            console.log('Perguntas armazenadas no estado:', questionList); 
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -16,10 +32,16 @@ const ListQuestion = ({ navigation, route }) => {
                 <Text style={styles.title}>Lista de Perguntas</Text>
                 <View style={styles.listContainer}>
                     <FlatList
+                        data={questions}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => {
+                            if (!item.alternatives) {
+                                console.error(`Pergunta sem alternativas: ${item.title}`);
+                                return null;
+                            }
+                            return <QuestionItem {...item} />;
+                        }}
                         ItemSeparatorComponent={SeparatorItem}
-                        keyExtractor={item => item.titulo}
-                        data={perguntaList}
-                        renderItem={({ item }) => <QuestionItem {...item} />}
                     />
                 </View>
                 <BottomBar />
@@ -57,10 +79,3 @@ const styles = StyleSheet.create({
 })
 
 export default ListQuestion;
-/*     
-<KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-        ></KeyboardAvoidingView>
-            </KeyboardAvoidingView> */

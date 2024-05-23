@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ref, push, set } from 'firebase/database'; // Certifique-se de importar essas funções corretamente
+import { database } from '../src/firebase'; // Importe a referência do banco de dados corretamente
 
 const CreateQuestionScreen = ({ navigation }) => {
     const [title, setTitle] = useState('');
@@ -9,9 +11,19 @@ const CreateQuestionScreen = ({ navigation }) => {
     const [alternatives, setAlternatives] = useState([{ text: '', isCorrect: false }]);
 
     const handleSaveQuestion = () => {
-        // Aqui você pode adicionar a lógica para salvar a pergunta
-        console.log('Pergunta salva:', { title, description, alternatives });
-        navigation.navigate('Listar pergunta')
+        const questionsRef = ref(database, 'questions');
+        const newQuestionRef = push(questionsRef);
+        set(newQuestionRef, {
+            title,
+            description,
+            alternatives,
+            createdAt: new Date().toISOString() // Adicione a data de criação da pergunta
+        }).then(() => {
+            console.log('Pergunta salva com sucesso!', { title, description, alternatives });
+            navigation.navigate('Listar pergunta');
+        }).catch((error) => {
+            console.error('Erro ao salvar pergunta:', error);
+        });
     };
 
     const handleAddAlternative = () => {
