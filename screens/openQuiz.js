@@ -1,66 +1,74 @@
-import React from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Platform, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const OpenQuiz = ({ navigation, route }) => {
+    const { quizId, quizTitle, quizDescription } = route.params;
+    const [selectedOption, setSelectedOption] = useState(null);
 
     const handleFinishQuiz = () => {
-        navigation.navigate('Home')
-      };
+        navigation.navigate('Home');
+    };
+
+    const handleConfirmAnswer = (correctAnswer) => {
+        if (selectedOption === correctAnswer) {
+            return styles.correctAnswer;
+        } else if (selectedOption !== null) {
+            return styles.wrongAnswer;
+        }
+        return null;
+    };
 
     return (
         <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-    >
-      <ScrollView contentContainerStyle={styles.scrollViewContainer} keyboardShouldPersistTaps="handled">
-        <View style={styles.container}>
-
-            <LinearGradient
-                colors={['#12082F', '#181D95']}
-                style={styles.background}
-            >
-                <Text style={styles.title}>Nome do Quiz</Text>
-                <View style={styles.quizContainer}>
-
-                    <Text style={styles.questionTitle}>Pergunta 1</Text>
-
-                    <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit
-                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum</Text>
-
-                <TouchableOpacity style={styles.answerButton}>
-                    <Text style={styles.textButton}>Resposta 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.answerButton}>
-                    <Text style={styles.textButton}>Resposta 2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.answerButton}>
-                    <Text style={styles.textButton}>Resposta 3</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.answerButton}>
-                    <Text style={styles.textButton}>Resposta 4</Text>
-                </TouchableOpacity>
-
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+        >
+            <ScrollView contentContainerStyle={styles.scrollViewContainer} keyboardShouldPersistTaps="handled">
+                <View style={styles.container}>
+                    <LinearGradient
+                        colors={['#12082F', '#181D95']}
+                        style={styles.background}
+                    >
+                        <Text style={styles.title}>{quizTitle}</Text>
+                        <View style={styles.quizContainer}>
+                            <Text style={styles.questionTitle}>Pergunta 1</Text>
+                            <Text style={styles.description}>{quizDescription}</Text>
+                            <TouchableOpacity
+                                style={[styles.answerButton, selectedOption === 'Resposta 1' && handleConfirmAnswer('Resposta 1')]}
+                                onPress={() => setSelectedOption('Resposta 1')}
+                            >
+                                <Text style={styles.textButton}>Resposta 1</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.answerButton, selectedOption === 'Resposta 2' && handleConfirmAnswer('Resposta 2')]}
+                                onPress={() => setSelectedOption('Resposta 2')}
+                            >
+                                <Text style={styles.textButton}>Resposta 2</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.answerButton, selectedOption === 'Resposta 3' && handleConfirmAnswer('Resposta 3')]}
+                                onPress={() => setSelectedOption('Resposta 3')}
+                            >
+                                <Text style={styles.textButton}>Resposta 3</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.answerButton, selectedOption === 'Resposta 4' && handleConfirmAnswer('Resposta 4')]}
+                                onPress={() => setSelectedOption('Resposta 4')}
+                            >
+                                <Text style={styles.textButton}>Resposta 4</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.nextButton} onPress={handleFinishQuiz}>
+                                <Text style={styles.textButton}>Próxima Pergunta</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </LinearGradient>
                 </View>
-                <TouchableOpacity style={styles.nextButton} onPress={handleFinishQuiz}>
-                    <Text style={styles.textButton}>Proxima Pergunta</Text>
-                </TouchableOpacity>
-
-            </LinearGradient>
-            </View>
-
             </ScrollView>
-                <BottomBar />
-        </KeyboardAvoidingView >
-
+            <BottomBar />
+        </KeyboardAvoidingView>
     );
 };
 
@@ -118,6 +126,12 @@ const styles = StyleSheet.create({
         color: '#12082F',
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    correctAnswer: {
+        backgroundColor: 'green',
+    },
+    wrongAnswer: {
+        backgroundColor: 'red',
     }
 });
 

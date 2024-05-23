@@ -2,12 +2,12 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
-const QuizItem = ({ title, description }) => {
+const QuizItem = ({ id, title, description }) => {
     const navigation = useNavigation();
     
     function handleOpenQuiz(){
-        navigation.navigate('Abrir quiz');
-    };
+      navigation.navigate('Abrir quiz', { quizId: id, quizTitle: title, quizDescription: description });
+  };
 
     return (
         <View style={styles.container}>

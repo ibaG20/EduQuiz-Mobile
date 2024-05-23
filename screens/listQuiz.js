@@ -23,10 +23,9 @@ const ListQuiz = ({ navigation, route }) => {
         return () => unsubscribe();
     }, []);
 
-    const handleOpenQuiz = (id) => {
-        navigation.navigate('Abrir quiz');
-        navigation.navigate('QuizDetail', { quizId: id });
-    };
+    const handleOpenQuiz = (id, title, description) => {
+        navigation.navigate('Abrir quiz', { quizId: id, quizTitle: title, quizDescription: description });
+    };        
 
     const renderQuizItem = ({ item }) => {
         return (
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
         width: 340,
         borderRadius: 8,
         marginBottom: 10,
-        marginBottom: 80
     }
 });
 

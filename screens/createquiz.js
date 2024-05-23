@@ -193,14 +193,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     addButton: {
-        backgroundColor: '#181D95',
+        backgroundColor: '#12082F',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 10,
         alignSelf: 'center',
     },
     addButtonText: {
-        color: '#FFF',
+        color: '#E7DEFF',
         fontSize: 16,
         fontWeight: 'bold',
     },
