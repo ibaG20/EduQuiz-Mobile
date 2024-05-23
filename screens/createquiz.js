@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, push, set } from 'firebase/database'; // Importar 'push' corretamente
 import { database } from '../src/firebase';
 
 const CreateQuizScreen = ({ navigation, route }) => {
@@ -39,13 +39,37 @@ const CreateQuizScreen = ({ navigation, route }) => {
             setErrorMessage('*Você deve adicionar ao menos duas perguntas no seu quiz! Caso não possua, você pode criá-las na tela "Criar pergunta" disponível no menu.');
         } else {
             setErrorMessage('');
-            console.log('Quiz salvo:', { title, description, questions: selectedQuestions });
+
+            // Salvar o quiz no Firebase
+            const quizzesRef = ref(database, 'quizzes');
+            const newQuizRef = push(quizzesRef); // Criar uma nova referência para o quiz
+            const newQuiz = {
+                title,
+                description,
+                questions: selectedQuestions,
+            };
+            set(newQuizRef, newQuiz) // Use 'set' para definir os dados do quiz
+                .then(() => {
+                    console.log('Quiz salvo:', newQuiz);
+                    // Redefinir os estados após salvar
+                    setTitle('');
+                    setDescription('');
+                    setSelectedQuestions([]);
+                    setErrorMessage(''); // Limpar a mensagem de erro
+                    // Navegar para a tela desejada após salvar, se necessário
+                    // navigation.navigate('QuizListScreen'); // Exemplo de navegação
+                })
+                .catch((error) => {
+                    setErrorMessage('*Houve um erro ao salvar o quiz. Tente novamente.');
+                    console.error('Erro ao salvar o quiz:', error);
+                });
         }
     };
 
     const renderQuestionsPicker = () => {
         return (
             <View style={styles.pickerContainer}>
+
                 <Picker
                     selectedValue={selectedQuestion}
                     onValueChange={(itemValue) => setSelectedQuestion(itemValue)}
@@ -63,7 +87,6 @@ const CreateQuizScreen = ({ navigation, route }) => {
             </View>
         );
     };
-    
 
     const renderSelectedQuestions = () => {
         return (
@@ -105,7 +128,6 @@ const CreateQuizScreen = ({ navigation, route }) => {
                             multiline
                         />
                         {renderQuestionsPicker()}
-                        
                     </View>
                     {renderSelectedQuestions()}
                     <TouchableOpacity onPress={handleSaveQuiz} style={styles.saveButton}>
@@ -134,7 +156,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: 'white',
     },
-
     formContainer: {
         justifyContent: 'center',
         backgroundColor: '#30237B',
@@ -172,14 +193,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     addButton: {
-        backgroundColor: '#12082F',
+        backgroundColor: '#181D95',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 10,
         alignSelf: 'center',
     },
     addButtonText: {
-        color: '#E7DEFF',
+        color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
     },
