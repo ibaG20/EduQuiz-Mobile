@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
@@ -9,8 +9,9 @@ import { database } from '../src/firebase';
 const CreateQuizScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [questionType, setQuestionType] = useState('Escolha uma pergunta');
+    const [selectedQuestion, setSelectedQuestion] = useState('');
     const [questions, setQuestions] = useState([]);
+    const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
@@ -24,29 +25,55 @@ const CreateQuizScreen = ({ navigation, route }) => {
         return () => unsubscribe();
     }, []);
 
+    const handleAddQuestion = () => {
+        if (selectedQuestion && !selectedQuestions.includes(selectedQuestion)) {
+            setSelectedQuestions([...selectedQuestions, selectedQuestion]);
+            setSelectedQuestion(''); // Resetar a seleção após adicionar
+        }
+    };
+
     const handleSaveQuiz = () => {
-        if (questionType === 'Escolha uma pergunta') {
-            setErrorMessage('*Você deve adicionar ao menos uma pergunta no seu quiz! Caso não possua, você pode criá-la na tela "Criar pergunta" disponível no menu.');
+        if (!title || !description) {
+            setErrorMessage('*Os campos Título e Descrição devem ser preenchidos! Verifique se não esqueceu algum campo.');
+        } else if (selectedQuestions.length < 2) {
+            setErrorMessage('*Você deve adicionar ao menos duas perguntas no seu quiz! Caso não possua, você pode criá-las na tela "Criar pergunta" disponível no menu.');
         } else {
             setErrorMessage('');
-            console.log('Quiz salvo:', { title, description, questionType, questions });
+            console.log('Quiz salvo:', { title, description, questions: selectedQuestions });
         }
     };
 
     const renderQuestionsPicker = () => {
         return (
-            <View>
+            <View style={styles.pickerContainer}>
                 <Picker
-                    selectedValue={questionType}
-                    onValueChange={(itemValue) => setQuestionType(itemValue)}
+                    selectedValue={selectedQuestion}
+                    onValueChange={(itemValue) => setSelectedQuestion(itemValue)}
                     style={styles.picker}
                 >
-                    <Picker.Item label="Escolha uma pergunta" value="Escolha uma pergunta" />
+                    <Picker.Item label="Escolha uma pergunta" value="" />
                     {questions.length > 0 && questions.map((question, index) => (
                         <Picker.Item key={index} label={question} value={question} />
                     ))}
                 </Picker>
+                <TouchableOpacity onPress={handleAddQuestion} style={styles.addButton}>
+                    <Text style={styles.addButtonText}>Adicionar pergunta</Text>
+                </TouchableOpacity>
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
+            </View>
+        );
+    };
+    
+
+    const renderSelectedQuestions = () => {
+        return (
+            <View style={styles.selectedQuestionsContainer}>
+                <Text style={styles.selectedQuestionsTitle}>Perguntas selecionadas:</Text>
+                <FlatList
+                    data={selectedQuestions}
+                    renderItem={({ item }) => <Text style={styles.selectedQuestion}>{item}</Text>}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             </View>
         );
     };
@@ -57,36 +84,36 @@ const CreateQuizScreen = ({ navigation, route }) => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
         >
-            <ScrollView contentContainerStyle={styles.scrollViewContainer} keyboardShouldPersistTaps="handled">
-                <LinearGradient
-                    colors={['#12082F', '#181D95']}
-                    style={styles.container}
-                >
+            <LinearGradient
+                colors={['#12082F', '#181D95']}
+                style={styles.container}
+            >
+                <View style={styles.innerContainer}>
                     <Text style={styles.title}>Criar Quiz</Text>
-                    <View style={styles.painel}>
-                        <View style={styles.formContainer}>
-                            <TextInput
-                                style={styles.titulo}
-                                placeholder="Título"
-                                value={title}
-                                onChangeText={setTitle}
-                            />
-                            <TextInput
-                                style={styles.descrição}
-                                placeholder="Descrição"
-                                value={description}
-                                onChangeText={setDescription}
-                                multiline
-                            />
-                            {renderQuestionsPicker()}
-                        </View>
+                    <View style={styles.formContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Título"
+                            value={title}
+                            onChangeText={setTitle}
+                        />
+                        <TextInput
+                            style={[styles.input, styles.textArea]}
+                            placeholder="Descrição"
+                            value={description}
+                            onChangeText={setDescription}
+                            multiline
+                        />
+                        {renderQuestionsPicker()}
+                        
                     </View>
+                    {renderSelectedQuestions()}
                     <TouchableOpacity onPress={handleSaveQuiz} style={styles.saveButton}>
                         <Text style={styles.saveButtonText}>Salvar quiz</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomSpace} />
-                </LinearGradient>
-            </ScrollView>
+                </View>
+            </LinearGradient>
             <BottomBar />
         </KeyboardAvoidingView>
     );
@@ -95,11 +122,11 @@ const CreateQuizScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#30237B',
     },
-    scrollViewContainer: {
-        flexGrow: 1,
+    innerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: 20,
     },
     title: {
         fontSize: 40,
@@ -107,43 +134,56 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: 'white',
     },
+
     formContainer: {
-        flex: 1,
-    },
-    titulo: {
-        height: 50,
-        width: 290,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        backgroundColor: '#E7DEFF',
-    },
-    descrição: {
-        height: 150,
-        width: 290,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        backgroundColor: '#E7DEFF',
-    },
-    picker: {
-        height: 40,
-        marginBottom: 10,
-        color: 'black',
-        backgroundColor: '#E7DEFF',
-    },
-    painel: {
         justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#30237B',
         borderRadius: 39,
         padding: 50,
         paddingHorizontal: 10,
+        paddingVertical: 30,
+        paddingBottom: 0,
+        marginBottom: 5,
+        marginTop: 10,
+        margin: 30,
     },
+    input: {
+        height: 50,
+        width: '75%',
+        borderColor: 'gray',
+        textAlign: 'top',
+        borderRadius: 5,
+        marginBottom: 10,
+        paddingHorizontal: 5,
+        backgroundColor: '#E7DEFF',
+        alignSelf: 'center',
+    },
+    textArea: {
+        height: 100,
+    },
+    picker: {
+        height: 50,
+        width: '75%',
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginBottom: 10,
+        backgroundColor: '#E7DEFF',
+        alignSelf: 'center',
+    },
+    addButton: {
+        backgroundColor: '#12082F',
+        paddingVertical: 15,
+        paddingHorizontal: 50,
+        borderRadius: 10,
+        alignSelf: 'center',
+    },
+    addButtonText: {
+        color: '#E7DEFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
     saveButton: {
         backgroundColor: '#E7DEFF',
         paddingVertical: 15,
@@ -162,6 +202,24 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontWeight: 'bold',
         fontSize: 15,
+    },
+    selectedQuestionsContainer: {
+        flex: 1,
+    },
+    selectedQuestionsTitle: {
+        fontSize: 18,
+        marginBottom: 10,
+        color: 'white',
+        alignSelf: 'center',
+    },
+    selectedQuestion: {
+        backgroundColor: '#E7DEFF',
+        fontSize: 16,
+        paddingVertical: 10,
+        paddingHorizontal: 130,
+        alignSelf: 'center',
+        borderRadius: 10,
+        marginBottom: 5,
     },
     bottomSpace: {
         height: 75,
