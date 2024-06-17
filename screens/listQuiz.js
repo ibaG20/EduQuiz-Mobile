@@ -1,12 +1,39 @@
-import React from 'react';
-import { FlatList, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
-import { QuizItem } from "../components/QuizItem";
+import React, { useState, useEffect } from 'react';
+import { FlatList, KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SeparatorItem } from '../components/SeparatorItem';
-import { quizList } from '../data/quizList';
 import BottomBar from '../components/BottomBar';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../src/firebase';
+import QuizItem from "../components/QuizItem"; // Certifique-se de importar corretamente o QuizItem
 
 const ListQuiz = ({ navigation, route }) => {
+    const [quizList, setQuizList] = useState([]);
+
+    useEffect(() => {
+        const quizzesRef = ref(database, 'quizzes');
+        const unsubscribe = onValue(quizzesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const quizzes = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                setQuizList(quizzes);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const handleOpenQuiz = (id, title, description) => {
+        navigation.navigate('Abrir quiz', { quizId: id, quizTitle: title, quizDescription: description });
+    };        
+
+    const renderQuizItem = ({ item }) => {
+        return (
+            <TouchableOpacity onPress={() => handleOpenQuiz(item.id)}>
+                <QuizItem title={item.title} description={item.description} />
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -16,12 +43,12 @@ const ListQuiz = ({ navigation, route }) => {
             >
                 <Text style={styles.title}>Lista de Quiz</Text>
                 <View style={styles.listContainer}>
-                <FlatList
-                    ItemSeparatorComponent={SeparatorItem}
-                    keyExtractor={item => item.titulo}
-                    data={quizList}
-                    renderItem={({ item }) => <QuizItem {...item} />}
-                />
+                    <FlatList
+                        ItemSeparatorComponent={SeparatorItem}
+                        keyExtractor={item => item.id}
+                        data={quizList}
+                        renderItem={renderQuizItem}
+                    />
                 </View>
                 <BottomBar />
             </LinearGradient>
@@ -42,7 +69,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 35,
         color: '#E7DEFF',
-        marginVertical: 30
+        marginVertical: 30,
+        alignSelf: 'center',
     },
     listContainer: {
         justifyContent: 'center',
@@ -53,7 +81,7 @@ const styles = StyleSheet.create({
         width: 340,
         borderRadius: 8,
         marginBottom: 10,
-        marginBottom: 80
     }
-})
+});
+
 export default ListQuiz;
