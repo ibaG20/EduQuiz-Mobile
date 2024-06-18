@@ -1,6 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
+import { auth } from '../src/firebase';
 
 const LoginScreen = ({ navigation, route }) => {
 
@@ -12,8 +14,21 @@ const LoginScreen = ({ navigation, route }) => {
             alert("Preencha os campos");
             return;
         }
-        navigation.replace('Home'); 
+    
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                console.log(user);
+                navigation.replace('Home');
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                console.log(errorMessage);
+                alert(errorMessage);
+            });
     }
+    
 
     function handleGoToCreateAccount() {
         navigation.navigate('Criar conta')
@@ -88,7 +103,7 @@ const styles = StyleSheet.create({
         color: '#D0C0FF',
         marginBottom: 20
     },
-    text:{
+    text: {
         color: '#E7DEFF',
         fontSize: 18,
         textAlign: 'left',
@@ -96,7 +111,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Espaçamento entre o texto e o input
         marginBottom: 5, // Espaçamento abaixo do texto
     },
-    input:{
+    input: {
         height: 50,
         width: 290,
         borderWidth: 1,
@@ -115,7 +130,7 @@ const styles = StyleSheet.create({
         width: 290,
         margin: 10
     },
-    textButton:{
+    textButton: {
         color: '#E7DEFF',
         fontSize: 20
     },
