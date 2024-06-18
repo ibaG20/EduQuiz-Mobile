@@ -1,21 +1,37 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, TextInput, StyleSheet } from 'react-native';
+import { auth } from '../src/firebase';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const CreateAccountScreen = ({ navigation, route }) => {
 
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassord] = useState('');
 
     function handleCreateAccount() {
-        if (name ==='' || email === '' || password === '') {
+
+        if (email === '' || password === '') {
             alert("Preencha os campos");
             return;
         }
-        // Aqui você pode adicionar verificações de autenticação mais complexas
-        navigation.replace('Home');  // Usa 'replace' para evitar que o usuário volte à tela de login
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log(user);
+                navigation.replace('Home');
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorMessage);
+                alert(errorMessage);
+            });
+
+
     }
+
 
     function handleGoToLogin() {
         navigation.navigate('Login')
@@ -32,13 +48,13 @@ const CreateAccountScreen = ({ navigation, route }) => {
                 <View style={styles.formContainer}>
                     <Text style={styles.titleForm}>Criar Conta</Text>
 
-                    <Text style={styles.text}>Nome:</Text>
+                    {/* <Text style={styles.text}>Nome:</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setName}
-                        value={name}
+                        value={auth}
                         placeholder='digite seu nome'
-                    />
+                    /> */}
                     <Text style={styles.text}>Email:</Text>
                     <TextInput
                         style={styles.input}
@@ -97,7 +113,7 @@ const styles = StyleSheet.create({
         color: '#D0C0FF',
         marginBottom: 20
     },
-    text:{
+    text: {
         color: '#E7DEFF',
         fontSize: 18,
         textAlign: 'left',
@@ -105,7 +121,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Espaçamento entre o texto e o input
         marginBottom: 5, // Espaçamento abaixo do texto
     },
-    input:{
+    input: {
         height: 50,
         width: 290,
         borderWidth: 1,
@@ -124,7 +140,7 @@ const styles = StyleSheet.create({
         width: 290,
         margin: 10
     },
-    textButton:{
+    textButton: {
         color: '#E7DEFF',
         fontSize: 20
     },

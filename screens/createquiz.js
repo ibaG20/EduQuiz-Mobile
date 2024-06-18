@@ -219,10 +219,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     errorMessage: {
-        color: 'red',
-        marginTop: 10,
+        color: '#fd946b',
         fontWeight: 'bold',
         fontSize: 15,
+        padding: 20,
+        alignSelf: 'center',
+        textAlign: 'center'
     },
     selectedQuestionsContainer: {
         flex: 1,
